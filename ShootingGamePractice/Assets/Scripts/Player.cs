@@ -3,35 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (PlayerController))]
+[RequireComponent (typeof(GunController))]
 public class Player : MonoBehaviour
 {
     void Start()
     {
-        Controller = GetComponent<PlayerController>();
-        ViewCamera = Camera.main;
+        controller = GetComponent<PlayerController>();
+        gunController = GetComponent<GunController>();
+
+        viewCamera = Camera.main;
     }
 
     void Update()
     {
-        Vector3 moveInput = new Vector3(Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical"));
-        Vector3 moveVelocity = moveInput.normalized * MoveSpeed;
+        // Handle Input
+        Move();
+        Look();
+        Shoot();
+    }
 
-        Controller.Move(moveVelocity);
+    protected void Move()
+    {
+        Vector3 moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        Vector3 moveVelocity = moveInput.normalized * moveSpeed;
 
-        Ray ray = ViewCamera.ScreenPointToRay (Input.mousePosition);
+        controller.Move(moveVelocity);
+    }
 
-        Plane groundPlane = new Plane (Vector3.up, Vector3.zero);
+    protected void Look()
+    {
+        Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
+
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
         if (groundPlane.Raycast(ray, out float rayDist))
         {
             Vector3 point = ray.GetPoint(rayDist);
 
-            Controller.LookAt(point);
+            controller.LookAt(point);
         }
     }
 
-    public float MoveSpeed = 5;
+    protected void Shoot()
+    {
+        const int LEFT_MOUSE_BUTTON = 0;
 
-    protected Camera ViewCamera;
-    protected PlayerController Controller;
+        if(Input.GetMouseButton(LEFT_MOUSE_BUTTON))
+        {
+            gunController.Shoot();
+        }
+    }
+
+    public float moveSpeed = 5;
+
+    protected Camera viewCamera;
+    protected PlayerController controller;
+    protected GunController gunController;
 }

@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MyRigidBody = GetComponent<Rigidbody>();
+        myRigidBody = GetComponent<Rigidbody>();
     }
 
     public void Move(Vector3 InVelocity)
     {
-        Velocity = InVelocity;
+        velocity = InVelocity;
     }
 
     public void LookAt(Vector3 InLookPoint)
@@ -26,10 +26,10 @@ public class PlayerController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        MyRigidBody.MovePosition(MyRigidBody.position + Velocity * Time.fixedDeltaTime);
+        myRigidBody.MovePosition(myRigidBody.position + velocity * Time.fixedDeltaTime);
     }
 
-    protected Vector3 Velocity;
+    protected Vector3 velocity;
 
-    protected Rigidbody MyRigidBody;
+    protected Rigidbody myRigidBody;
 }
