@@ -4,10 +4,12 @@ using UnityEngine;
 
 [RequireComponent (typeof (PlayerController))]
 [RequireComponent (typeof(GunController))]
-public class Player : MonoBehaviour
+public class Player : LivingEntity
 {
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
 
